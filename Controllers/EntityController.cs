@@ -21,13 +21,13 @@ namespace UnistreamTest.Controllers
             _entityStorage = entityStorage;
         }
 
-        // Это общий ендпоинт для получения/добавления Entity в зависимости от Query параметров. Разделить его на 2 ендпоинта
-        // в соответствии с т.з. - не получится т.к. в примерах на получение и добавление Entity роутинг совпадает.
-        // Разделение на GET и POST - тоже не лучшая идея, т.к. передавать Query параметры в POST - плохая практика.
-        // Это явно не лучшая практика, но это будет работать в соответствии с т.з.
-        // Кроме того, примеры запросов из т.з. не были перекодированы в URL и соответственно не будут валидными для сериализации.
-        // И хотя данный метод будет работать (если перекодировать URL запрос из примера), лучше воспользоваться REST методами
-        // GetEntity и InsertEntity которые я создал в качестве альтернативного решения. Также, только для REST методов будут Unit тесты.
+        // Р­С‚Рѕ РѕР±С‰РёР№ РµРЅРґРїРѕРёРЅС‚ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ/РґРѕР±Р°РІР»РµРЅРёСЏ Entity РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ Query РїР°СЂР°РјРµС‚СЂРѕРІ. Р Р°Р·РґРµР»РёС‚СЊ РµРіРѕ РЅР° 2 РµРЅРґРїРѕРёРЅС‚Р°
+        // РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚.Р·. - РЅРµ РїРѕР»СѓС‡РёС‚СЃСЏ С‚.Рє. РІ РїСЂРёРјРµСЂР°С… РЅР° РїРѕР»СѓС‡РµРЅРёРµ Рё РґРѕР±Р°РІР»РµРЅРёРµ Entity СЂРѕСѓС‚РёРЅРі СЃРѕРІРїР°РґР°РµС‚.
+        // Р Р°Р·РґРµР»РµРЅРёРµ РЅР° GET Рё POST - С‚РѕР¶Рµ РЅРµ Р»СѓС‡С€Р°СЏ РёРґРµСЏ, С‚.Рє. РїРµСЂРµРґР°РІР°С‚СЊ Query РїР°СЂР°РјРµС‚СЂС‹ РІ POST - РїР»РѕС…Р°СЏ РїСЂР°РєС‚РёРєР°.
+        // Р­С‚Рѕ СЏРІРЅРѕ РЅРµ Р»СѓС‡С€Р°СЏ РїСЂР°РєС‚РёРєР°, РЅРѕ СЌС‚Рѕ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ С‚.Р·.
+        // РљСЂРѕРјРµ С‚РѕРіРѕ, РїСЂРёРјРµСЂС‹ Р·Р°РїСЂРѕСЃРѕРІ РёР· С‚.Р·. РЅРµ Р±С‹Р»Рё РїРµСЂРµРєРѕРґРёСЂРѕРІР°РЅС‹ РІ URL Рё СЃРѕРѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕ РЅРµ Р±СѓРґСѓС‚ РІР°Р»РёРґРЅС‹РјРё РґР»СЏ СЃРµСЂРёР°Р»РёР·Р°С†РёРё.
+        // Р С…РѕС‚СЏ РґР°РЅРЅС‹Р№ РјРµС‚РѕРґ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ (РµСЃР»Рё РїРµСЂРµРєРѕРґРёСЂРѕРІР°С‚СЊ URL Р·Р°РїСЂРѕСЃ РёР· РїСЂРёРјРµСЂР°), Р»СѓС‡С€Рµ РІРѕСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ REST РјРµС‚РѕРґР°РјРё
+        // GetEntity Рё InsertEntity РєРѕС‚РѕСЂС‹Рµ СЏ СЃРѕР·РґР°Р» РІ РєР°С‡РµСЃС‚РІРµ Р°Р»СЊС‚РµСЂРЅР°С‚РёРІРЅРѕРіРѕ СЂРµС€РµРЅРёСЏ. РўР°РєР¶Рµ, С‚РѕР»СЊРєРѕ РґР»СЏ REST РјРµС‚РѕРґРѕРІ Р±СѓРґСѓС‚ Unit С‚РµСЃС‚С‹.
 
         [Route("")]
         public ActionResult<Entity> EntityAction([FromQuery(Name = "get")] Guid? queryId = null, [FromQuery(Name = "insert")] string entityStr = "")
@@ -36,15 +36,15 @@ namespace UnistreamTest.Controllers
             try
             {
                 id = queryId ?? Guid.Empty;
-                // Запрет одновременного добавления и получения Entity
+                // Р—Р°РїСЂРµС‚ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕРіРѕ РґРѕР±Р°РІР»РµРЅРёСЏ Рё РїРѕР»СѓС‡РµРЅРёСЏ Entity
                 if (string.IsNullOrEmpty(entityStr) is false && id != Guid.Empty)
                     return StatusCode(400);
 
-                // Добавление Entity
+                // Р”РѕР±Р°РІР»РµРЅРёРµ Entity
                 if (string.IsNullOrEmpty(entityStr) is false)
                 {
                     Entity newEntity = JsonConvert.DeserializeObject<Entity>(entityStr);
-                    // Добавление Entity с пустым Guid - запрещено
+                    // Р”РѕР±Р°РІР»РµРЅРёРµ Entity СЃ РїСѓСЃС‚С‹Рј Guid - Р·Р°РїСЂРµС‰РµРЅРѕ
                     if (newEntity.Id == Guid.Empty)
                         return StatusCode(400);
 
@@ -52,7 +52,7 @@ namespace UnistreamTest.Controllers
                     return Ok();
                 }
 
-                // Получение Entity
+                // РџРѕР»СѓС‡РµРЅРёРµ Entity
                 if (id != Guid.Empty)
                 {
                     Entity entityFromStorage = _entityStorage.GetById(id);
@@ -69,7 +69,7 @@ namespace UnistreamTest.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"Не удалось получить {nameof(Entity)} с {nameof(Entity.Id)}: {id} из хранилища. {ex.Message}");
+                _logger.LogWarning($"РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ {nameof(Entity)} СЃ {nameof(Entity.Id)}: {id} РёР· С…СЂР°РЅРёР»РёС‰Р°. {ex.Message}");
 
                 return StatusCode(400);
             }
@@ -97,7 +97,7 @@ namespace UnistreamTest.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogWarning($"Не удалось получить {nameof(Entity)} с {nameof(Entity.Id)}: {id} из хранилища. {ex.Message}");
+                _logger.LogWarning($"РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ {nameof(Entity)} СЃ {nameof(Entity.Id)}: {id} РёР· С…СЂР°РЅРёР»РёС‰Р°. {ex.Message}");
 
                 return StatusCode(400);
             }
@@ -109,7 +109,7 @@ namespace UnistreamTest.Controllers
         {
             try
             {
-                // Добавление Entity с пустым Guid - запрещено
+                // Р”РѕР±Р°РІР»РµРЅРёРµ Entity СЃ РїСѓСЃС‚С‹Рј Guid - Р·Р°РїСЂРµС‰РµРЅРѕ
                 if (entity.Id == Guid.Empty)
                     return StatusCode(400);
 
@@ -119,9 +119,9 @@ namespace UnistreamTest.Controllers
             catch (Exception ex)
             {
                 if (entity is not null)
-                    _logger.LogWarning($"Не удалось добавить новый {nameof(Entity)} с {nameof(Entity.Id)}: {entity.Id} в хранилище. {ex.Message}");
+                    _logger.LogWarning($"РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№ {nameof(Entity)} СЃ {nameof(Entity.Id)}: {entity.Id} РІ С…СЂР°РЅРёР»РёС‰Рµ. {ex.Message}");
                 else
-                    _logger.LogWarning($"Не удалось добавить новый {nameof(Entity)} в хранилище. {ex.Message}");
+                    _logger.LogWarning($"РќРµ СѓРґР°Р»РѕСЃСЊ РґРѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№ {nameof(Entity)} РІ С…СЂР°РЅРёР»РёС‰Рµ. {ex.Message}");
 
                 return StatusCode(400);
             }
